@@ -12,6 +12,8 @@ public class Controller implements ActionListener, MouseListener {
 
     void initController(){
         view.initUI();
+        view.updateTable(model.getRowData(), model.getColumnNames() );
+
         view.connectButton.addActionListener(this);
         view.dbTreeList.addMouseListener(this);
 
@@ -28,7 +30,9 @@ public class Controller implements ActionListener, MouseListener {
         if( obj instanceof JList){
             JList jt = (JList)obj;
             if(jt == view.dbTreeList){
-                System.out.println("???"+jt.getSelectedValue() );
+                //System.out.println("???"+jt.getSelectedValue() );
+                model.selectTable( jt.getSelectedValue().toString() );
+                view.updateTable(model.getRowData(), model.getColumnNames() );
             }
         }
     } //end of mouseClicked
@@ -70,13 +74,8 @@ public class Controller implements ActionListener, MouseListener {
         //윈도우 종료 이외에도 Ctrl+C로 강제종료 할 때에도 어쨌든 DB 연결을 종료해야 한다.
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
-                try {
-                    model.closeAll();
-                    Thread.sleep(200);
-                    System.out.println("프로그램을 종료합니다.");
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                model.closeAll();
+                System.out.println("프로그램을 종료합니다.");
             }
         });
     } // end of closeProgram

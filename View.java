@@ -28,10 +28,13 @@ public class View {
             JTextField userPassInput;
             JButton connectButton;
         JPanel dbTreePanel;
-            JScrollPane jsp1;
+            JScrollPane jspList;
                 JList<String> dbTreeList;
                     DefaultListModel<String> dlm;
         JPanel dbTablePanel;
+            JScrollPane jspTable;
+                JTable dbTable;
+                    DefaultTableModel dtmTable;
 
     void initUI(){
         container = mainFrame.getContentPane();
@@ -41,7 +44,6 @@ public class View {
         loginPanel = new JPanel();
         loginPanel.setLayout( new GridLayout(1,5, 10, 0) );
         loginPanel.setBorder( BorderFactory.createEmptyBorder(10, 10, 10, 10) );
-        //loginPanel.setBackground(Color.BLACK);
             userNameLabel = new JLabel("insert ID:");
             userNameLabel.setHorizontalAlignment(JLabel.RIGHT);;
             userNameInput = new JTextField();
@@ -58,21 +60,44 @@ public class View {
 
         dbTreePanel = new JPanel();
         dbTreePanel.setBackground(Color.WHITE);
-        dbTreePanel.setPreferredSize(new Dimension(150, 600));
+        dbTreePanel.setLayout(new CardLayout());
+        int loginPanelHeight = (int)loginPanel.getPreferredSize().getHeight();
+        dbTreePanel.setPreferredSize(new Dimension(150, 600-loginPanelHeight ) );
             dlm = new DefaultListModel<String>();
-            dbTreeList = new JList<>(dlm);
-            jsp1 = new JScrollPane(dbTreeList);
-            dbTreePanel.add(jsp1);
+            dbTreeList = new JList<>();
+            dbTreeList.setModel(dlm);
+            dbTreeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            jspList = new JScrollPane(dbTreeList);
+            jspList.setPreferredSize(new Dimension(150, 600-loginPanelHeight ) );
+            dbTreePanel.add(jspList);
         mainPanel.add(dbTreePanel, BorderLayout.WEST);
 
         dbTablePanel = new JPanel();
-        dbTablePanel.setBackground(Color.DARK_GRAY);
-        mainPanel.add(dbTablePanel, BorderLayout.CENTER);
+        dbTablePanel.setLayout(new CardLayout() );
+        dbTablePanel.setPreferredSize(new Dimension(300, 300));
+        dbTablePanel.setBackground(Color.BLACK);
+            dtmTable = new DefaultTableModel();
+            dbTable = new JTable(dtmTable);
+            dbTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            jspTable = new JScrollPane(dbTable);
+            dbTablePanel.add(jspTable, BorderLayout.CENTER);
+        mainPanel.add(dbTablePanel, BorderLayout.SOUTH);
 
         container.add(mainPanel);
         container.revalidate();
         container.repaint();
     }
+
+
+    void updateTable(Vector<Vector<Object>> rowData, Vector<String> columnNames){
+        dtmTable = new DefaultTableModel(rowData, columnNames);
+        dtmTable.fireTableDataChanged();
+        dbTable.revalidate();
+        dbTable.repaint();
+        container.revalidate();
+        container.repaint();
+    }
+
 
     void resetDlm(){
         dlm.clear();
@@ -86,6 +111,7 @@ public class View {
             dlm.addElement(str);
         }
     }
+
 
     String getUserName(){
         return userNameInput.getText();
@@ -103,6 +129,7 @@ public class View {
         if(b) connectButton.setText("connect");
         else connectButton.setText("disconnect");
     }
+
 
     //self test code
     public static void main(String[] args) {
