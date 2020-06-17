@@ -12,12 +12,8 @@ public class Controller implements ActionListener, MouseListener {
 
     void initController(){
         view.initUI();
-        view.updateTable(model.getRowData(), model.getColumnNames() );
-
         view.connectButton.addActionListener(this);
         view.dbTreeList.addMouseListener(this);
-
-        closeProgram();
     } //end of startController
 
     @Override //MouseListener
@@ -52,7 +48,7 @@ public class Controller implements ActionListener, MouseListener {
                         System.out.println("연결이 성공했습니다.");
                     }else{
                         tempB = true;
-                        view.resetDlm();
+                        view.resetTableList();
                         JOptionPane.showMessageDialog(null, "아이디와 비밀번호를 확인하세요.");
                         System.out.println("연결이 실패했습니다.");
                     }
@@ -67,8 +63,16 @@ public class Controller implements ActionListener, MouseListener {
 
             }
         } //end of JButton
-
     } //end of actionPerformed
+
+
+
+    public static void main(String[] args) {
+        Controller controller = new Controller(new View(), new Model() );
+        controller.initController();
+
+        controller.closeProgram();
+    } //end of main
 
     public void closeProgram(){
         //윈도우 종료 이외에도 Ctrl+C로 강제종료 할 때에도 어쨌든 DB 연결을 종료해야 한다.
@@ -79,10 +83,4 @@ public class Controller implements ActionListener, MouseListener {
             }
         });
     } // end of closeProgram
-
-    public static void main(String[] args) {
-        Controller controller = new Controller(new View(), new Model() );
-        controller.initController();
-    } //end of main
-
 }

@@ -105,9 +105,9 @@ public class Model{
             } //end of while
 
             //데이터 확인용
-            for(Vector<Object> v : rowData){
-                System.out.println(v);
-            }
+            //for(Vector<Object> v : rowData){
+            //    System.out.println(v);
+            //}
 
         }catch(final SQLException sqle){
             sqle.printStackTrace();

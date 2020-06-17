@@ -30,7 +30,7 @@ public class View {
         JPanel dbTreePanel;
             JScrollPane jspList;
                 JList<String> dbTreeList;
-                    DefaultListModel<String> dlm;
+                    DefaultListModel<String> tableList;
         JPanel dbTablePanel;
             JScrollPane jspTable;
                 JTable dbTable;
@@ -63,9 +63,9 @@ public class View {
         dbTreePanel.setLayout(new CardLayout());
         int loginPanelHeight = (int)loginPanel.getPreferredSize().getHeight();
         dbTreePanel.setPreferredSize(new Dimension(150, 600-loginPanelHeight ) );
-            dlm = new DefaultListModel<String>();
+            tableList = new DefaultListModel<String>();
             dbTreeList = new JList<>();
-            dbTreeList.setModel(dlm);
+            dbTreeList.setModel(tableList);
             dbTreeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             jspList = new JScrollPane(dbTreeList);
             jspList.setPreferredSize(new Dimension(150, 600-loginPanelHeight ) );
@@ -80,37 +80,38 @@ public class View {
             dbTable = new JTable(dtmTable);
             dbTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             jspTable = new JScrollPane(dbTable);
-            dbTablePanel.add(jspTable, BorderLayout.CENTER);
-        mainPanel.add(dbTablePanel, BorderLayout.SOUTH);
+            dbTablePanel.add(jspTable);
+        mainPanel.add(dbTablePanel, BorderLayout.CENTER);
 
         container.add(mainPanel);
         container.revalidate();
         container.repaint();
-    }
+    } //end of initUI
 
 
     void updateTable(Vector<Vector<Object>> rowData, Vector<String> columnNames){
         dtmTable = new DefaultTableModel(rowData, columnNames);
         dtmTable.fireTableDataChanged();
+        dbTable.setModel(dtmTable);
         dbTable.revalidate();
         dbTable.repaint();
         container.revalidate();
         container.repaint();
-    }
+    } //end of updateTable
 
 
-    void resetDlm(){
-        dlm.clear();
+    void resetTableList(){
+        tableList.clear();
         dbTreeList.revalidate();
         dbTreeList.repaint();
-    }
+    } //end of resetTableList
 
     void setDbTreeList(Vector<String> list){
-        dlm.clear();
+        tableList.clear();
         for(String str : list){
-            dlm.addElement(str);
+            tableList.addElement(str);
         }
-    }
+    } //end of setDbTreeList
 
 
     String getUserName(){
@@ -135,5 +136,19 @@ public class View {
     public static void main(String[] args) {
         View view = new View();
         view.initUI();
+
+        Vector<String> columnNames = new Vector<String>();
+        columnNames.add("A");
+        columnNames.add("B");
+        columnNames.add("C");
+
+        Vector<Object> v1 = new Vector<Object>();
+        Vector<Object> v2 = new Vector<Object>();
+        v1.add("A1"); v1.add("A2"); v1.add("A3");
+        v2.add("B1"); v2.add("B2"); v2.add("B3");
+        Vector<Vector<Object>> rowData = new Vector<Vector<Object>>();
+        rowData.add(v1); rowData.add(v2);
+
+        view.updateTable(rowData, columnNames);
     }
 }
