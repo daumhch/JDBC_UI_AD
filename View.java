@@ -74,14 +74,14 @@ public class View {
 
         dbTablePanel = new JPanel();
         dbTablePanel.setLayout(new CardLayout() );
-        dbTablePanel.setPreferredSize(new Dimension(300, 300));
-        dbTablePanel.setBackground(Color.BLACK);
+        //dbTablePanel.setPreferredSize(new Dimension(300, 300));
+        //dbTablePanel.setBackground(Color.BLACK);
             dtmTable = new DefaultTableModel();
             dbTable = new JTable(dtmTable);
             dbTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             jspTable = new JScrollPane(dbTable);
             dbTablePanel.add(jspTable, BorderLayout.CENTER);
-        mainPanel.add(dbTablePanel, BorderLayout.SOUTH);
+        mainPanel.add(dbTablePanel, BorderLayout.CENTER);
 
         container.add(mainPanel);
         container.revalidate();
@@ -90,8 +90,10 @@ public class View {
 
 
     void updateTable(Vector<Vector<Object>> rowData, Vector<String> columnNames){
+        //dtmTable = new DefaultTableModel(rowData, columnNames);
         dtmTable = new DefaultTableModel(rowData, columnNames);
         dtmTable.fireTableDataChanged();
+        dbTable.setModel(dtmTable);
         dbTable.revalidate();
         dbTable.repaint();
         container.revalidate();
